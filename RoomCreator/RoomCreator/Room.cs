@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoomCreator
 {
-    public enum CellType    { Simple, Water, Hole }
+    public enum CellType    { Simple, Hole, GoodWater, BadWater }
     public enum MonsterType { None, Random }
     public enum RewardType  { None, Gold, Item, Life, Random }
 
@@ -29,11 +29,30 @@ namespace RoomCreator
             {
                 case CellType.Simple:
                     return Color.White;
-                case CellType.Water:
+                case CellType.BadWater:
                     return Color.Blue;
+                case CellType.GoodWater:
+                    return Color.LightBlue;
                 case CellType.Hole:
                     return Color.Black;
                 default: 
+                    return Color.Black;
+            }
+        }
+
+        public Color getTextColor()
+        {
+            switch (Type)
+            {
+                case CellType.Simple:
+                    return Color.Black;
+                case CellType.BadWater:
+                    return Color.White;
+                case CellType.GoodWater:
+                    return Color.Black;
+                case CellType.Hole:
+                    return Color.White;
+                default:
                     return Color.Black;
             }
         }
@@ -144,8 +163,10 @@ namespace RoomCreator
                 {
                     if(line[col] == 'S')
                         cells[row, col].Type = CellType.Simple;
-                    else if (line[col] == 'W')
-                        cells[row, col].Type = CellType.Water;
+                    else if (line[col] == 'G')
+                        cells[row, col].Type = CellType.GoodWater;
+                    else if (line[col] == 'B')
+                        cells[row, col].Type = CellType.BadWater;
                     else if (line[col] == 'H')
                         cells[row, col].Type = CellType.Hole;
                 }
@@ -178,8 +199,11 @@ namespace RoomCreator
                             case CellType.Simple:
                                 line += "S";
                                 break;
-                            case CellType.Water:
-                                line += "W";
+                            case CellType.GoodWater:
+                                line += "G";
+                                break;
+                            case CellType.BadWater:
+                                line += "B";
                                 break;
                             case CellType.Hole:
                                 line += "H";
@@ -297,11 +321,13 @@ namespace RoomCreator
 
             switch(cells[row, col].Type)
             {
-                case CellType.Simple: type = CellType.Water;
+                case CellType.Simple: type = CellType.Hole;
                     break;
-                case CellType.Water: type = CellType.Hole;
+                case CellType.Hole: type = CellType.GoodWater;
                     break;
-                case CellType.Hole: type = CellType.Simple;
+                case CellType.GoodWater: type = CellType.BadWater;
+                    break;
+                case CellType.BadWater: type = CellType.Simple;
                     break;
             }
 

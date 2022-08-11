@@ -27,26 +27,60 @@ namespace RoomCreator
             
             return coord.X.ToString() + separator + coord.Y.ToString();
         }
-        private Color getButtonTextColor(Point coord)
+        private Bitmap getButtonImage(Point coord)
         {
-            Color color = Color.White;
-            
             Button button = cells[coord.X, coord.Y];
+            Cell currentCell = room.getCell(coord);
 
-            if (room.getCell(coord).Monster == MonsterType.Random)
-                return Color.Red;
+            Bitmap bmp = new Bitmap(button.ClientRectangle.Width, button.ClientRectangle.Height);
 
-            if (button.BackColor == Color.White)
-                color = Color.Black;
-            else if (button.BackColor == Color.Blue)
-                color = Color.White;
-            else if (button.BackColor == Color.Black)
-                color = Color.White;
-            else
-                color = Color.Black;
+            using (Graphics G = Graphics.FromImage(bmp))
+            {
+                G.Clear(button.BackColor);
+                using (Graphics gfx = Graphics.FromImage(bmp))
+                using (SolidBrush brush = new SolidBrush(currentCell.getColor()))
+                {
+                    gfx.FillRectangle(brush, 0, 0, button.ClientRectangle.Width, button.ClientRectangle.Height);
+                }
 
-            return color;
+                StringFormat SF = new StringFormat();
+                SF.Alignment = StringAlignment.Center;
+                SF.LineAlignment = StringAlignment.Near;
+
+                if(currentCell.Reward != RewardType.None)
+                {
+                    using (Font arial = new Font("Arial", 15))
+                    {
+                        Rectangle RC = button.ClientRectangle;
+                        RC.Inflate(-5, -5);
+                        G.DrawString("*", arial, Brushes.Orange, RC, SF);
+                    }
+                }
+                
+                Brush textBrush = new SolidBrush(currentCell.getTextColor());
+
+                string text = coord.X + " " + coord.Y;
+                using (Font courier = new Font("MS Courier", 12))
+                {
+                    SF.LineAlignment = StringAlignment.Center;
+                    G.DrawString(text, courier, textBrush, button.ClientRectangle, SF);
+                }
+
+                if (currentCell.Monster != MonsterType.None)
+                {
+                    using (Font arial = new Font("Arial", 12))
+                    {
+                        Rectangle RC = button.ClientRectangle;
+                        RC.X = 0;
+                        RC.Y = 15;
+                        G.DrawString("m", arial, Brushes.Red, RC, SF);
+                    }
+                }
+            }
+
+            return bmp;
         }
+        
         private Point getButtonIndex(Button button)
         {
             for (int row = 0; row < room.Height; ++row)
@@ -81,11 +115,17 @@ namespace RoomCreator
                     Button newButton = new Button();
                     this.Controls.Add(newButton);
 
-                    newButton.Text =  getButtonText(coord);
-                    newButton.Font = buttonTextFont;
+                    //newButton.Text =  getButtonText(coord);
+                    //newButton.Font = buttonTextFont;
                     newButton.Location = new Point(row * buttonSize.Width + start.X, col * buttonSize.Height + start.Y);
                     newButton.Size = new Size(50, 50);
-                    newButton.BackColor = currnetCell.getColor();
+                    //newButton.BackColor = currnetCell.getColor();
+
+
+                    //newButton.Text = "";
+                    
+               
+
 
                     newButton.Click += new EventHandler(leftClick);
 
@@ -94,7 +134,10 @@ namespace RoomCreator
                     //newButton.Click += new EventHandler(leftClick);
 
                     cells[row, col] = newButton;
-                    newButton.ForeColor = getButtonTextColor(coord);
+
+                    newButton.Image = getButtonImage(coord);
+                    newButton.ImageAlign = ContentAlignment.MiddleCenter;
+                    //newButton.ForeColor = getButtonTextColor(coord);
                 }
             }
             Size = new Size(room.Width * buttonSize.Width + 23, room.Height * buttonSize.Height + 120);
@@ -114,9 +157,11 @@ namespace RoomCreator
             else if (reward_radioButton.Checked)
                 room.changeReward(coord);
 
-            button.BackColor    = room.getCell(coord).getColor();
-            button.ForeColor    = getButtonTextColor(coord);
-            button.Text         = getButtonText(coord);
+            //button.BackColor    = room.getCell(coord).getColor();
+            //button.ForeColor    = getButtonTextColor(coord);
+            //button.Text         = getButtonText(coord);
+            button.Image = getButtonImage(coord);
+            button.ImageAlign = ContentAlignment.MiddleCenter;
         }
         private void sizeToolStripMenuItem1_Click(object sender, EventArgs e)
         {

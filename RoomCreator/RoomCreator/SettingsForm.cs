@@ -40,6 +40,8 @@ namespace RoomCreator
             reward_comboBox.DataSource      = Enum.GetValues(typeof(RewardType));
             reward_comboBox.SelectedIndex   = (int)room.RoomReward;
 
+            level_numericUpDown.Value       = room.Level;
+
             createFolder_checkBox.Checked   = room.SaveData.CreateFolder;
         }
 
@@ -54,6 +56,7 @@ namespace RoomCreator
             this.room.Width         = tempRoom.Width;
             this.room.SaveData      = tempRoom.SaveData;
             this.room.RoomReward    = tempRoom.RoomReward;
+            this.room.Level         = tempRoom.Level;
             this.DialogResult       = DialogResult.OK;
             this.Close();
         }
@@ -96,6 +99,11 @@ namespace RoomCreator
                 ID_textBox.Text = ID_textBox.Text.Remove(ID_textBox.Text.Length - 1);
             }else if(ID_textBox.Text != "")
                 tempRoom.ID = Convert.ToInt32(ID_textBox.Text);
+        }
+
+        private void level_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            tempRoom.Level = (int)level_numericUpDown.Value;
         }
     }
 }

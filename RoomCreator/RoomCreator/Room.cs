@@ -61,7 +61,7 @@ namespace RoomCreator
     public class Room : ICloneable
     {
         //Private data
-        private const int   headerDataCount = 6;
+        private const int   headerDataCount = 7;
         private Cell[,]     cells;
 
 
@@ -74,6 +74,7 @@ namespace RoomCreator
         public string       Description;
 
         public RewardType   RoomReward;
+        public int Level;
 
         public SaveData     SaveData;
 
@@ -88,6 +89,7 @@ namespace RoomCreator
             Description = "";
 
             RoomReward  = RewardType.None;
+            Level = 10;
 
             SaveData    = new SaveData();
 
@@ -150,8 +152,9 @@ namespace RoomCreator
             Height      = Convert.ToInt32(lines[2].Split(' ')[1]);
             Enum.TryParse<RewardType>(lines[3], out RewardType roomReward);
             RoomReward  = roomReward;
-            monsterPath = lines[4];
-            rewardPath  = lines[5];
+            Level       = Convert.ToInt32(lines[4]);
+            monsterPath = lines[5];
+            rewardPath  = lines[6];
 
 
             resetRoom();
@@ -186,6 +189,7 @@ namespace RoomCreator
                 writer.WriteLine(Description);
                 writer.WriteLine("{0} {1}", Width, Height);
                 writer.WriteLine(RoomReward.ToString());
+                writer.WriteLine(Level);
                 writer.WriteLine(monsterPath);
                 writer.WriteLine(rewardPath);
 

@@ -43,8 +43,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.ID_textBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.level_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.width_numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_numericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.level_numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // OK_button
@@ -183,11 +186,30 @@
             this.label6.TabIndex = 16;
             this.label6.Text = "ID";
             // 
+            // level_numericUpDown
+            // 
+            this.level_numericUpDown.Location = new System.Drawing.Point(103, 174);
+            this.level_numericUpDown.Name = "level_numericUpDown";
+            this.level_numericUpDown.Size = new System.Drawing.Size(59, 29);
+            this.level_numericUpDown.TabIndex = 17;
+            this.level_numericUpDown.ValueChanged += new System.EventHandler(this.level_numericUpDown_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(51, 174);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(46, 21);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Level";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.level_numericUpDown);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.ID_textBox);
             this.Controls.Add(this.label5);
@@ -207,6 +229,7 @@
             this.Text = "SettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.width_numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_numericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.level_numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,5 +252,7 @@
         private Label label5;
         private TextBox ID_textBox;
         private Label label6;
+        private NumericUpDown level_numericUpDown;
+        private Label label7;
     }
 }

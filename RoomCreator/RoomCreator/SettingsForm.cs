@@ -38,6 +38,7 @@ namespace RoomCreator
         {
             this.room.Height = tempRoom.Height;
             this.room.Width = tempRoom.Width;
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

@@ -143,7 +143,7 @@ namespace RoomCreator
             string monsterPath = "";
             string rewardPath = "";
 
-            string[] lines = File.ReadAllLines(path + @"\room.rm");
+            string[] lines = File.ReadAllLines(path);
 
             Name        = lines[0].Split(' ')[0];
             ID          = Convert.ToInt32(lines[0].Split(' ')[1]);
@@ -277,22 +277,22 @@ namespace RoomCreator
         }
         public void save(string path)
         {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            SaveData.setPath(path);
+            SaveData.createFolder();
 
-            DirectoryInfo folder = new DirectoryInfo(path);
-            if (folder.GetFileSystemInfos().Length == 0)
-            {
-                string monsterPath = path + @"\monsters.ms";
-                string rewardPath = path + @"\rewards.rw";
-                string roomPath = path + @"\room.rm";
+            string monsterPath = SaveData.getMonsterFilePath();
+            string rewardPath = SaveData.getRewardFilePath();
+            string roomPath = SaveData.getRoomFilePath();
 
-                saveMonsters(monsterPath);
-                saveRewards(rewardPath);
-                saveRoom(roomPath, monsterPath, rewardPath);
-            }
+            saveMonsters(monsterPath);
+            saveRewards(rewardPath);
+            saveRoom(roomPath, monsterPath, rewardPath);
+
+            //DirectoryInfo folder = new DirectoryInfo(SaveData.getRootPath());
+            //if (folder.GetFileSystemInfos().Length == 0)
+            //{
+                
+            //}
         }
 
 

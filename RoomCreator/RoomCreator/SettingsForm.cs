@@ -43,6 +43,7 @@ namespace RoomCreator
             level_numericUpDown.Value       = room.Level;
 
             createFolder_checkBox.Checked   = room.SaveData.CreateFolder;
+            folderName_textBox.Text         = room.SaveData.FolderName;
         }
 
 
@@ -80,6 +81,7 @@ namespace RoomCreator
         private void createFolder_checkBox_CheckedChanged(object sender, EventArgs e)
         {
             tempRoom.SaveData.CreateFolder = createFolder_checkBox.Checked;
+            folderName_textBox.Enabled = createFolder_checkBox.Checked;
         }
         private void description_textBox_TextChanged(object sender, EventArgs e)
         {
@@ -104,6 +106,11 @@ namespace RoomCreator
         private void level_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
             tempRoom.Level = (int)level_numericUpDown.Value;
+        }
+
+        private void folderName_textBox_TextChanged(object sender, EventArgs e)
+        {
+            tempRoom.SaveData.FolderName = folderName_textBox.Text;
         }
     }
 }

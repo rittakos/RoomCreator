@@ -177,10 +177,10 @@ namespace RoomCreator
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //DialogResult result = openFileDialog.ShowDialog();
-            DialogResult result = folderBrowserDialog1.ShowDialog();
+            DialogResult result = openFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                room.load(folderBrowserDialog1.SelectedPath);
+                room.load(openFileDialog.FileName);
                 reset();
                 generateMap();
             }
@@ -188,10 +188,16 @@ namespace RoomCreator
         }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //saveFileDialog.ShowDialog();
-            DialogResult result = folderBrowserDialog1.ShowDialog();
+            //DialogResult result = folderBrowserDialog1.ShowDialog();
+            //if (result == DialogResult.OK)
+            //    room.save(folderBrowserDialog1.SelectedPath);
+            DialogResult result = saveFileDialog.ShowDialog();
             if (result == DialogResult.OK)
-                room.save(folderBrowserDialog1.SelectedPath);
+                room.save(saveFileDialog.FileName);
+        }
+        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            room.load(openFileDialog.FileName);
         }
 
 
@@ -211,10 +217,6 @@ namespace RoomCreator
         private void doubleClick(object sender, MouseEventArgs e)
         {
 
-        }
-        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            room.load(openFileDialog.FileName);
         }
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {

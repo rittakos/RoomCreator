@@ -50,6 +50,13 @@
             this.folderName_textBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.monsterFile_textBox = new System.Windows.Forms.TextBox();
+            this.rewardFile_textBox = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.upWall_checkBox = new System.Windows.Forms.CheckBox();
+            this.downWall_checkBox = new System.Windows.Forms.CheckBox();
+            this.leftWall_checkBox = new System.Windows.Forms.CheckBox();
+            this.rightWall_checkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.width_numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_numericUpDown)).BeginInit();
@@ -240,7 +247,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(444, 325);
+            this.label10.Location = new System.Drawing.Point(447, 302);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(136, 21);
             this.label10.TabIndex = 22;
@@ -249,17 +256,93 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(447, 358);
+            this.label11.Location = new System.Drawing.Point(447, 347);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(131, 21);
             this.label11.TabIndex = 23;
             this.label11.Text = "Reward file name";
+            // 
+            // monsterFile_textBox
+            // 
+            this.monsterFile_textBox.Location = new System.Drawing.Point(589, 299);
+            this.monsterFile_textBox.Name = "monsterFile_textBox";
+            this.monsterFile_textBox.Size = new System.Drawing.Size(199, 29);
+            this.monsterFile_textBox.TabIndex = 24;
+            this.monsterFile_textBox.TextChanged += new System.EventHandler(this.monsterFile_textBox_TextChanged);
+            // 
+            // rewardFile_textBox
+            // 
+            this.rewardFile_textBox.Location = new System.Drawing.Point(589, 344);
+            this.rewardFile_textBox.Name = "rewardFile_textBox";
+            this.rewardFile_textBox.Size = new System.Drawing.Size(199, 29);
+            this.rewardFile_textBox.TabIndex = 25;
+            this.rewardFile_textBox.TextChanged += new System.EventHandler(this.rewardFile_textBox_TextChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(258, 116);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(50, 21);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Walls:";
+            // 
+            // upWall_checkBox
+            // 
+            this.upWall_checkBox.AutoSize = true;
+            this.upWall_checkBox.Location = new System.Drawing.Point(398, 116);
+            this.upWall_checkBox.Name = "upWall_checkBox";
+            this.upWall_checkBox.Size = new System.Drawing.Size(52, 25);
+            this.upWall_checkBox.TabIndex = 27;
+            this.upWall_checkBox.Text = "Up";
+            this.upWall_checkBox.UseVisualStyleBackColor = true;
+            this.upWall_checkBox.CheckedChanged += new System.EventHandler(this.upWall_checkBox_CheckedChanged);
+            // 
+            // downWall_checkBox
+            // 
+            this.downWall_checkBox.AutoSize = true;
+            this.downWall_checkBox.Location = new System.Drawing.Point(398, 178);
+            this.downWall_checkBox.Name = "downWall_checkBox";
+            this.downWall_checkBox.Size = new System.Drawing.Size(73, 25);
+            this.downWall_checkBox.TabIndex = 28;
+            this.downWall_checkBox.Text = "Down";
+            this.downWall_checkBox.UseVisualStyleBackColor = true;
+            this.downWall_checkBox.CheckedChanged += new System.EventHandler(this.downWall_checkBox_CheckedChanged);
+            // 
+            // leftWall_checkBox
+            // 
+            this.leftWall_checkBox.AutoSize = true;
+            this.leftWall_checkBox.Location = new System.Drawing.Point(343, 147);
+            this.leftWall_checkBox.Name = "leftWall_checkBox";
+            this.leftWall_checkBox.Size = new System.Drawing.Size(58, 25);
+            this.leftWall_checkBox.TabIndex = 29;
+            this.leftWall_checkBox.Text = "Left";
+            this.leftWall_checkBox.UseVisualStyleBackColor = true;
+            this.leftWall_checkBox.CheckedChanged += new System.EventHandler(this.leftWall_checkBox_CheckedChanged);
+            // 
+            // rightWall_checkBox
+            // 
+            this.rightWall_checkBox.AutoSize = true;
+            this.rightWall_checkBox.Location = new System.Drawing.Point(455, 147);
+            this.rightWall_checkBox.Name = "rightWall_checkBox";
+            this.rightWall_checkBox.Size = new System.Drawing.Size(69, 25);
+            this.rightWall_checkBox.TabIndex = 30;
+            this.rightWall_checkBox.Text = "Right";
+            this.rightWall_checkBox.UseVisualStyleBackColor = true;
+            this.rightWall_checkBox.CheckedChanged += new System.EventHandler(this.rightWall_checkBox_CheckedChanged);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.rightWall_checkBox);
+            this.Controls.Add(this.leftWall_checkBox);
+            this.Controls.Add(this.downWall_checkBox);
+            this.Controls.Add(this.upWall_checkBox);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.rewardFile_textBox);
+            this.Controls.Add(this.monsterFile_textBox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.folderName_textBox);
@@ -316,5 +399,12 @@
         private TextBox folderName_textBox;
         private Label label10;
         private Label label11;
+        private TextBox monsterFile_textBox;
+        private TextBox rewardFile_textBox;
+        private Label label12;
+        private CheckBox upWall_checkBox;
+        private CheckBox downWall_checkBox;
+        private CheckBox leftWall_checkBox;
+        private CheckBox rightWall_checkBox;
     }
 }

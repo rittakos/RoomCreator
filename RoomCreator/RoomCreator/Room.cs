@@ -9,7 +9,66 @@ namespace RoomCreator
     public enum CellType    { Simple, Hole, GoodWater, BadWater }
     public enum MonsterType { None, Random }
     public enum RewardType  { None, Gold, Item, Life, Random }
+    public enum Direction   { Left, Right, Up, Down }
+    public class Walls
+    {
+        Dictionary<Direction, int> walls;
 
+        public Walls()
+        {
+            walls = new Dictionary<Direction, int>();
+
+            walls.Add(Direction.Left, 0);
+            walls.Add(Direction.Right, 0);
+            walls.Add(Direction.Up, 0);
+            walls.Add(Direction.Down, 0);
+        }
+
+        public bool hasWall(Direction dir)
+        {
+            return walls[dir] != 0;
+        } 
+        public void setWall(Direction dir, int count = 1)
+        {
+            if (walls.ContainsKey(dir))
+                walls[dir] = count;
+            else
+                walls.Add(dir, count);
+        }
+
+        public void setWall(Direction dir, bool hasWall)
+        {
+            int count = hasWall ? 1 : 0;
+            if (walls.ContainsKey(dir))
+                walls[dir] = count;
+            else
+                walls.Add(dir, count);
+        }
+
+        public string GetStringToSerialize()
+        {
+            string result = "";
+
+            result += (walls[Direction.Left].ToString() + " ");
+            result += (walls[Direction.Right].ToString() + " ");
+            result += (walls[Direction.Up].ToString() + " ");
+            result += (walls[Direction.Down].ToString());
+
+            return result;
+        }
+
+        public void SetWallsFromFile(string input)
+        {
+            string[] wallStrings = input.Split(' ');
+
+            walls.Clear();
+
+            walls.Add(Direction.Left,   Convert.ToInt32(wallStrings[0]));
+            walls.Add(Direction.Right,  Convert.ToInt32(wallStrings[1]));
+            walls.Add(Direction.Up,     Convert.ToInt32(wallStrings[2]));
+            walls.Add(Direction.Down,   Convert.ToInt32(wallStrings[3]));
+        }
+    }
     public class Cell
     {
         public CellType     Type;
@@ -61,7 +120,7 @@ namespace RoomCreator
     public class Room : ICloneable
     {
         //Private data
-        private const int   headerDataCount = 7;
+        private const int   headerDataCount = 8;
         private Cell[,]     cells;
 
 
@@ -73,8 +132,9 @@ namespace RoomCreator
         public int          ID;
         public string       Description;
 
+        public Walls        Wall;
         public RewardType   RoomReward;
-        public int Level;
+        public int          Level;
 
         public SaveData     SaveData;
 
@@ -88,6 +148,7 @@ namespace RoomCreator
             ID          = 0;
             Description = "";
 
+            Wall      = new Walls();
             RoomReward  = RewardType.None;
             Level = 10;
 
@@ -153,8 +214,9 @@ namespace RoomCreator
             Enum.TryParse<RewardType>(lines[3], out RewardType roomReward);
             RoomReward  = roomReward;
             Level       = Convert.ToInt32(lines[4]);
-            monsterPath = lines[5];
-            rewardPath  = lines[6];
+            Wall.SetWallsFromFile(lines[5]);
+            monsterPath = lines[6];
+            rewardPath  = lines[7];
 
 
             resetRoom();
@@ -190,6 +252,7 @@ namespace RoomCreator
                 writer.WriteLine("{0} {1}", Width, Height);
                 writer.WriteLine(RoomReward.ToString());
                 writer.WriteLine(Level);
+                writer.WriteLine(Wall.GetStringToSerialize());
                 writer.WriteLine(monsterPath);
                 writer.WriteLine(rewardPath);
 

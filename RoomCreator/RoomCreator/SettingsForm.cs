@@ -44,6 +44,11 @@ namespace RoomCreator
 
             createFolder_checkBox.Checked   = room.SaveData.CreateFolder;
             folderName_textBox.Text         = room.SaveData.FolderName;
+
+            leftWall_checkBox.Checked       = room.Wall.hasWall(Direction.Left);
+            rightWall_checkBox.Checked      = room.Wall.hasWall(Direction.Right);
+            upWall_checkBox.Checked         = room.Wall.hasWall(Direction.Up);
+            downWall_checkBox.Checked       = room.Wall.hasWall(Direction.Down);
         }
 
 
@@ -58,6 +63,7 @@ namespace RoomCreator
             this.room.SaveData      = tempRoom.SaveData;
             this.room.RoomReward    = tempRoom.RoomReward;
             this.room.Level         = tempRoom.Level;
+            this.room.Wall          = tempRoom.Wall;
             this.DialogResult       = DialogResult.OK;
             this.Close();
         }
@@ -111,6 +117,36 @@ namespace RoomCreator
         private void folderName_textBox_TextChanged(object sender, EventArgs e)
         {
             tempRoom.SaveData.FolderName = folderName_textBox.Text;
+        }
+
+        private void monsterFile_textBox_TextChanged(object sender, EventArgs e)
+        {
+            tempRoom.SaveData.MonsterFileName = monsterFile_textBox.Text;
+        }
+
+        private void rewardFile_textBox_TextChanged(object sender, EventArgs e)
+        {
+            tempRoom.SaveData.RewardFileName = rewardFile_textBox.Text;
+        }
+
+        private void upWall_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.Wall.setWall(Direction.Up, upWall_checkBox.Checked);
+        }
+
+        private void downWall_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.Wall.setWall(Direction.Down, downWall_checkBox.Checked);
+        }
+
+        private void leftWall_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.Wall.setWall(Direction.Left, leftWall_checkBox.Checked);
+        }
+
+        private void rightWall_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.Wall.setWall(Direction.Right, rightWall_checkBox.Checked);
         }
     }
 }

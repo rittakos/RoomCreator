@@ -1,3 +1,5 @@
+using RoomCreator;
+
 namespace RoomCreator
 {
     public partial class Form1 : Form
@@ -22,7 +24,7 @@ namespace RoomCreator
 
             Button button = cells[coord.X, coord.Y];
 
-            if (room.getCell(coord).Reward != RewardType.None)
+            if (room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
                 separator = "*";
             
             return coord.X.ToString() + separator + coord.Y.ToString();
@@ -47,7 +49,7 @@ namespace RoomCreator
                 SF.Alignment = StringAlignment.Center;
                 SF.LineAlignment = StringAlignment.Near;
 
-                if(currentCell.Reward != RewardType.None)
+                if(room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
                 {
                     using (Font arial = new Font("Arial", 15))
                     {
@@ -66,7 +68,7 @@ namespace RoomCreator
                     G.DrawString(text, courier, textBrush, button.ClientRectangle, SF);
                 }
 
-                if (currentCell.Monster != MonsterType.None)
+                if (room.monsters.GetMonsterOnCoord(coord) != null && room.monsters.GetMonsterOnCoord(coord).Type != MonsterType.None)
                 {
                     using (Font arial = new Font("Arial", 12))
                     {
@@ -95,10 +97,14 @@ namespace RoomCreator
         }
         private void reset()
         {
-            foreach(Button b in cells)
+            room.resetRoom();
+
+            foreach (Button b in cells)
             {
                 this.Controls.Remove(b);
             }
+
+            cells = new Button[room.Height, room.Width];
         }
         private void generateMap()
         {
@@ -117,7 +123,7 @@ namespace RoomCreator
 
                     //newButton.Text =  getButtonText(coord);
                     //newButton.Font = buttonTextFont;
-                    newButton.Location = new Point(row * buttonSize.Width + start.X, col * buttonSize.Height + start.Y);
+                    newButton.Location = new Point(col * buttonSize.Width + start.X, row * buttonSize.Height + start.Y);
                     newButton.Size = new Size(50, 50);
                     //newButton.BackColor = currnetCell.getColor();
 
@@ -153,9 +159,36 @@ namespace RoomCreator
             if (cellType_radioButton.Checked)
                 room.changeCellType(coord);
             else if (monster_radioButton.Checked)
-                room.changeMonster(coord);
+            {
+                MonsterType type = MonsterType.None;
+                if(room.monsters.GetMonsterOnCoord(coord) != null)
+                    type = room.monsters.GetMonsterOnCoord(coord).Type;
+
+                Monster m = new Monster(type, coord);
+                m.Type = type;
+
+                Form settings = new MonsterChooser(ref m);
+                DialogResult result = settings.ShowDialog();
+
+                if(result == DialogResult.OK)
+                    room.monsters.changeMonster(coord, m.Type);
+            }
             else if (reward_radioButton.Checked)
-                room.changeReward(coord);
+            {
+                RewardType type = RewardType.None;
+
+                if (room.rewards.GetRewardOnCoord(coord) != null)
+                    type = room.rewards.GetRewardOnCoord(coord).Type;
+
+                Reward r = new Reward(type, coord);
+                r.Type = type;
+
+                Form settings = new RewardChooserForm(ref r);
+                DialogResult result = settings.ShowDialog();
+
+                if (result == DialogResult.OK)
+                    room.rewards.changeReward(coord, (RewardType)r.Type);
+            }
 
             //button.BackColor    = room.getCell(coord).getColor();
             //button.ForeColor    = getButtonTextColor(coord);
@@ -163,6 +196,7 @@ namespace RoomCreator
             button.Image = getButtonImage(coord);
             button.ImageAlign = ContentAlignment.MiddleCenter;
         }
+
         private void sizeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Form settings = new SettingsForm(ref room);
@@ -180,8 +214,8 @@ namespace RoomCreator
             DialogResult result = openFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                room.load(openFileDialog.FileName);
                 reset();
+                room.load(openFileDialog.FileName);
                 generateMap();
             }
 
@@ -236,6 +270,11 @@ namespace RoomCreator
         {
             if (e.KeyCode == Keys.M)
                 monster_radioButton.Checked = true;
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator#readme", UseShellExecute = true });
         }
     }
 }

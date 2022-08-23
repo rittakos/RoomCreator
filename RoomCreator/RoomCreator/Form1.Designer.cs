@@ -42,6 +42,7 @@
             this.cellType_radioButton = new System.Windows.Forms.RadioButton();
             this.monster_radioButton = new System.Windows.Forms.RadioButton();
             this.reward_radioButton = new System.Windows.Forms.RadioButton();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settings_contextMenuStrip.SuspendLayout();
             this.settings_menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -73,7 +74,8 @@
             this.settings_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sizeToolStripMenuItem1,
             this.loadToolStripMenuItem,
-            this.saveToolStripMenuItem});
+            this.saveToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.settings_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.settings_menuStrip.Name = "settings_menuStrip";
             this.settings_menuStrip.Size = new System.Drawing.Size(800, 29);
@@ -146,6 +148,13 @@
             this.reward_radioButton.Text = "Rewards";
             this.reward_radioButton.UseVisualStyleBackColor = true;
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(56, 25);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -184,5 +193,6 @@
         private RadioButton cellType_radioButton;
         private RadioButton monster_radioButton;
         private RadioButton reward_radioButton;
+        private ToolStripMenuItem helpToolStripMenuItem;
     }
 }

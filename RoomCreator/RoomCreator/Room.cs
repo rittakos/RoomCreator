@@ -72,14 +72,14 @@ namespace RoomCreator
     public class Cell
     {
         public CellType     Type;
-        public MonsterType  Monster;
-        public RewardType   Reward;
+        //public Monster  Monster;
+        //public Reward   Reward;
 
         public Cell()
         {
             Type = CellType.Simple;
-            Monster = MonsterType.None;
-            Reward = RewardType.None;
+            //Monster = new Monster();
+            //Reward = new Reward();
         }
 
         public Color getColor()
@@ -117,11 +117,180 @@ namespace RoomCreator
         }
     }
     
+    public class Monster
+    {
+        public MonsterType Type;
+        public Point Coord;
+
+        public string ToSerializableString()
+        {
+            string line = "";
+            line += Coord.X;
+            line += " ";
+            line += Coord.Y;
+            line += " ";
+
+            if (Type == MonsterType.Random)
+                line += "Random";
+
+            return line;
+        }
+        public Monster(string type, Point coord)
+        {
+            if (type == "Random")
+                Type = MonsterType.Random;
+            Coord = coord;
+        }
+
+        public Monster(MonsterType type, Point coord)
+        {
+            Type = type;
+            Coord = coord;
+        }
+    }
+
+    public class Reward
+    {
+        public RewardType Type;
+        public Point Coord;
+        public string ToSerializableString()
+        {
+            string line = "";
+
+            line += Coord.X;
+            line += " ";
+            line += Coord.Y;
+            line += " ";
+
+            if (Type == RewardType.Random)
+                line += "Random";
+
+            return line;
+        }
+        public Reward(string type, Point coord)
+        {
+            if(type == "Random")
+                Type = RewardType.Random;
+            Coord = coord;
+        }
+        public Reward(RewardType type, Point coord)
+        { 
+            Type = type;
+            Coord = coord;
+        }
+        public Reward(Reward other)
+        {
+            this.Type = other.Type;
+            this.Coord = other.Coord;
+        }
+    }
+
+    public class Monsters
+    {
+        //private List<Monster> monsters;
+        public Dictionary<Point, Monster> monsters;
+        public Monsters()
+        {
+            monsters = new Dictionary<Point, Monster>();
+        }
+        public Monster GetMonsterOnCoord(Point coord)
+        {
+            if(monsters.ContainsKey(coord))
+                return monsters[coord];
+            return null;
+        }
+        public void RemoveMonster(Point coord)
+        {
+            monsters.Remove(coord);
+        }
+        public MonsterType changeMonster(Point coord, MonsterType type)
+        {
+            if(monsters.ContainsKey(coord))
+            {
+                monsters[coord].Type = type;
+            }else
+            {
+                monsters.Add(coord, new Monster(type, coord));
+            }
+
+            return monsters[coord].Type;
+
+            //if (cells[row, col].Monster == MonsterType.Random)
+            //    cells[row, col].Monster = MonsterType.None;
+            //else if (cells[row, col].Monster == MonsterType.None)
+            //    cells[row, col].Monster = MonsterType.Random;
+
+            //return cells[row, col].Monster;
+        }
+
+        internal MonsterType AddMonster(Point coord, string type)
+        {
+            if (!monsters.ContainsKey(coord))
+            {
+                monsters.Add(coord, new Monster(type, coord));
+            }
+
+            return monsters[coord].Type;
+        }
+    }
+
+    public class Rewards
+    {
+        //private List<Reward> rewards;
+        public Dictionary<Point, Reward> rewards;
+        public Rewards()
+        {
+            rewards = new Dictionary<Point, Reward>();
+        }
+        public Reward GetRewardOnCoord(Point coord)
+        {
+            if (rewards.ContainsKey(coord))
+                return rewards[coord];
+            return null;
+        }
+        public void RemoveReward(Point coord)
+        {
+            rewards.Remove(coord);
+        }
+        public RewardType changeReward(Point coord, RewardType type)
+        {
+            if (rewards.ContainsKey(coord))
+            {
+                rewards[coord].Type = type;
+            }
+            else
+            {
+                rewards.Add(coord, new Reward(type, coord));
+            }
+
+            return rewards[coord].Type;
+
+            //if (cells[row, col].Reward == RewardType.None)
+            //    cells[row, col].Reward = RewardType.Random;
+            //else if (cells[row, col].Reward == RewardType.Random)
+            //    cells[row, col].Reward = RewardType.None;
+
+            //return cells[row, col].Reward;
+        }
+
+        public RewardType AddReward(Point coord, string type)
+        {
+            if (!rewards.ContainsKey(coord))
+            {
+                rewards.Add(coord, new Reward(type, coord));
+            }
+
+            return rewards[coord].Type;
+        }
+    }
+
     public class Room : ICloneable
     {
         //Private data
-        private const int   headerDataCount = 8;
-        private Cell[,]     cells;
+        private const int       headerDataCount = 9;
+        private Cell[,]         cells;
+        public Monsters         monsters;
+        public Rewards          rewards;
 
 
         //Public data
@@ -131,6 +300,8 @@ namespace RoomCreator
         public string       Name;
         public int          ID;
         public string       Description;
+
+        public bool         IsWall;
 
         public Walls        Wall;
         public RewardType   RoomReward;
@@ -170,6 +341,7 @@ namespace RoomCreator
         private bool loadRewards(string path)
         {
             string[] lines = File.ReadAllLines(path);
+            rewards.rewards.Clear();
 
             for (int r = 0; r < lines.Length; ++r)
             {
@@ -177,8 +349,10 @@ namespace RoomCreator
                 int x = Convert.ToInt32(reward[0]);
                 int y = Convert.ToInt32(reward[1]);
 
-                if (reward[2] == "Random")
-                    cells[x, y].Reward = RewardType.Random;
+                rewards.AddReward(new Point(x, y), reward[2]);
+
+                //if (reward[2] == "Random")
+                //    cells[x, y].Reward = RewardType.Random;
             }
 
             return true;
@@ -189,12 +363,15 @@ namespace RoomCreator
 
             for(int m = 0; m < lines.Length; ++m)
             {
-                string[] monster = lines[m].Split(' ');
-                int x = Convert.ToInt32(monster[0]);
-                int y = Convert.ToInt32(monster[1]);
+                string[] data = lines[m].Split(' ');
+                int x = Convert.ToInt32(data[0]);
+                int y = Convert.ToInt32(data[1]);
+                monsters.AddMonster(new Point(x, y), data[2]);
+                //string[] data = lines[m].Split(' ');
+                //int x = Convert.ToInt32(data[0]);
+                //int y = Convert.ToInt32(data[1]);
 
-                if (monster[2] == "Random")
-                    cells[x, y].Monster = MonsterType.Random;
+                //cells[x, y].Monster = Monster.CreateMonster(lines[m]);
             }
 
             return true;
@@ -209,14 +386,15 @@ namespace RoomCreator
             Name        = lines[0].Split(' ')[0];
             ID          = Convert.ToInt32(lines[0].Split(' ')[1]);
             Description = lines[1];
-            Width       = Convert.ToInt32(lines[2].Split(' ')[0]);
-            Height      = Convert.ToInt32(lines[2].Split(' ')[1]);
-            Enum.TryParse<RewardType>(lines[3], out RewardType roomReward);
+            IsWall      = Convert.ToInt32(lines[2]) == 0 ? false : true;
+            Width       = Convert.ToInt32(lines[3].Split(' ')[0]);
+            Height      = Convert.ToInt32(lines[3].Split(' ')[1]);
+            Enum.TryParse<RewardType>(lines[4], out RewardType roomReward);
             RoomReward  = roomReward;
-            Level       = Convert.ToInt32(lines[4]);
-            Wall.SetWallsFromFile(lines[5]);
-            monsterPath = lines[6];
-            rewardPath  = lines[7];
+            Level       = Convert.ToInt32(lines[5]);
+            Wall.SetWallsFromFile(lines[6]);
+            monsterPath = lines[7];
+            rewardPath  = lines[8];
 
 
             resetRoom();
@@ -249,6 +427,7 @@ namespace RoomCreator
             {
                 writer.WriteLine("{0} {1}", Name, ID);
                 writer.WriteLine(Description);
+                writer.WriteLine(IsWall ? "1" : "0");
                 writer.WriteLine("{0} {1}", Width, Height);
                 writer.WriteLine(RoomReward.ToString());
                 writer.WriteLine(Level);
@@ -288,23 +467,25 @@ namespace RoomCreator
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
-                for (int row = 0; row < Height; ++row)
-                {
-                    for (int col = 0; col < Width; ++col)
-                    {
-                        if (cells[row, col].Monster == MonsterType.Random)
-                        {
-                            string line = "";
-                            line += row;
-                            line += " ";
-                            line += col;
-                            line += " ";
-                            line += "Random";
+                foreach (KeyValuePair<Point, Monster> monster in monsters.monsters)
+                    writer.WriteLine(monster.Value.ToSerializableString());
+                //for (int row = 0; row < Height; ++row)
+                //{
+                //    for (int col = 0; col < Width; ++col)
+                //    {
+                //        if (cells[row, col].Monster == MonsterType.Random)
+                //        {
+                //            string line = "";
+                //            line += row;
+                //            line += " ";
+                //            line += col;
+                //            line += " ";
+                //            line += "Random";
 
-                            writer.WriteLine(line);
-                        }
-                    }
-                }
+                //            writer.WriteLine(line);
+                //        }
+                //    }
+                //}
             }
 
             return true;
@@ -313,27 +494,29 @@ namespace RoomCreator
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
-                for (int row = 0; row < Height; ++row)
-                {
-                    for (int col = 0; col < Width; ++col)
-                    {
-                        string line = "";
-                        if (cells[row, col].Reward != RewardType.None)
-                        {
-                            line += row;
-                            line += " ";
-                            line += col;
-                            line += " ";
-                        } else
-                            continue;
+                foreach(KeyValuePair<Point, Reward> reward in rewards.rewards)
+                    writer.WriteLine(reward.Value.ToSerializableString());
+                //for (int row = 0; row < Height; ++row)
+                //{
+                //    for (int col = 0; col < Width; ++col)
+                //    {
+                //        string line = "";
+                //        if (cells[row, col].Reward != RewardType.None)
+                //        {
+                //            line += row;
+                //            line += " ";
+                //            line += col;
+                //            line += " ";
+                //        } else
+                //            continue;
 
-                        if(cells[row, col].Reward == RewardType.Random)
-                           line += "Random";
+                //        if(cells[row, col].Reward == RewardType.Random)
+                //           line += "Random";
 
 
-                        writer.WriteLine(line);
-                    }
-                }
+                //        writer.WriteLine(line);
+                //    }
+                //}
             }
 
             return true;
@@ -362,7 +545,9 @@ namespace RoomCreator
 
         public void resetRoom()
         {
-            cells = new Cell[Width, Height];
+            cells = new Cell[Height, Width];
+            monsters = new Monsters();
+            rewards = new Rewards();
 
             for (int row = 0; row < Height; ++row)
             {
@@ -376,7 +561,6 @@ namespace RoomCreator
         {
             return cells[coord.X, coord.Y];
         }
-
 
 
         public CellType changeCellType(Point coord)
@@ -400,30 +584,6 @@ namespace RoomCreator
 
             cells[row, col].Type = type;
             return type;
-        }
-        internal MonsterType changeMonster(Point coord)
-        {
-            int row = coord.X;
-            int col = coord.Y;
-
-            if(cells[row, col].Monster == MonsterType.Random)
-                cells[row, col].Monster = MonsterType.None;
-            else if (cells[row, col].Monster == MonsterType.None)
-                cells[row, col].Monster = MonsterType.Random;
-
-            return cells[row, col].Monster;
-        }
-        internal RewardType changeReward(Point coord)
-        {
-            int row = coord.X;
-            int col = coord.Y;
-
-            if (cells[row, col].Reward == RewardType.None)
-                cells[row, col].Reward = RewardType.Random;
-            else if (cells[row, col].Reward == RewardType.Random)
-                cells[row, col].Reward = RewardType.None;
-
-            return cells[row, col].Reward;
         }
 
 

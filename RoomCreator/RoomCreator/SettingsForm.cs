@@ -34,6 +34,8 @@ namespace RoomCreator
             ID_textBox.Text                 = room.ID.ToString();
             description_textBox.Text        = room.Description;
 
+            isWall_checkBox.Checked         = room.IsWall;
+
             width_numericUpDown1.Value      = room.Width;
             height_numericUpDown.Value      = room.Height;
 
@@ -58,6 +60,7 @@ namespace RoomCreator
             this.room.Name          = tempRoom.Name;
             this.room.ID            = tempRoom.ID;
             this.room.Description   = tempRoom.Description;
+            this.room.IsWall        = tempRoom.IsWall;
             this.room.Height        = tempRoom.Height;
             this.room.Width         = tempRoom.Width;
             this.room.SaveData      = tempRoom.SaveData;
@@ -147,6 +150,16 @@ namespace RoomCreator
         private void rightWall_checkBox_CheckedChanged(object sender, EventArgs e)
         {
             tempRoom.Wall.setWall(Direction.Right, rightWall_checkBox.Checked);
+        }
+
+        private void isWall_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.IsWall = isWall_checkBox.Checked;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator", UseShellExecute = true });
         }
     }
 }

@@ -57,6 +57,8 @@
             this.downWall_checkBox = new System.Windows.Forms.CheckBox();
             this.leftWall_checkBox = new System.Windows.Forms.CheckBox();
             this.rightWall_checkBox = new System.Windows.Forms.CheckBox();
+            this.isWall_checkBox = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.width_numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_numericUpDown)).BeginInit();
@@ -331,11 +333,35 @@
             this.rightWall_checkBox.UseVisualStyleBackColor = true;
             this.rightWall_checkBox.CheckedChanged += new System.EventHandler(this.rightWall_checkBox_CheckedChanged);
             // 
+            // isWall_checkBox
+            // 
+            this.isWall_checkBox.AutoSize = true;
+            this.isWall_checkBox.Location = new System.Drawing.Point(16, 162);
+            this.isWall_checkBox.Name = "isWall_checkBox";
+            this.isWall_checkBox.Size = new System.Drawing.Size(62, 25);
+            this.isWall_checkBox.TabIndex = 31;
+            this.isWall_checkBox.Text = "Wall";
+            this.isWall_checkBox.UseVisualStyleBackColor = true;
+            this.isWall_checkBox.CheckedChanged += new System.EventHandler(this.isWall_checkBox_CheckedChanged);
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(729, 9);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(59, 21);
+            this.linkLabel1.TabIndex = 32;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "GitHub";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.isWall_checkBox);
             this.Controls.Add(this.rightWall_checkBox);
             this.Controls.Add(this.leftWall_checkBox);
             this.Controls.Add(this.downWall_checkBox);
@@ -406,5 +432,7 @@
         private CheckBox downWall_checkBox;
         private CheckBox leftWall_checkBox;
         private CheckBox rightWall_checkBox;
+        private CheckBox isWall_checkBox;
+        private LinkLabel linkLabel1;
     }
 }

@@ -49,7 +49,7 @@ namespace RoomCreator
 
         public string getRoomFilePath() 
         { 
-            return folderPath + "\\" + RoomFileName + "." + RoomExtension; 
+            return folderPath + "\\" + RoomFileName; 
         }
         public string getMonsterFilePath() 
         { 

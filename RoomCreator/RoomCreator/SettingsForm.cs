@@ -39,7 +39,7 @@ namespace RoomCreator
             width_numericUpDown1.Value      = room.Width;
             height_numericUpDown.Value      = room.Height;
 
-            reward_comboBox.DataSource      = Enum.GetValues(typeof(RewardType));
+            reward_comboBox.DataSource      = Enum.GetValues(typeof(RoomRewardType));
             reward_comboBox.SelectedIndex   = (int)room.RoomReward;
 
             level_numericUpDown.Value       = room.Level;
@@ -67,16 +67,35 @@ namespace RoomCreator
             this.room.RoomReward    = tempRoom.RoomReward;
             this.room.Level         = tempRoom.Level;
             this.room.Wall          = tempRoom.Wall;
+            this.room.NeedReset     = tempRoom.NeedReset;
             this.DialogResult       = DialogResult.OK;
             this.Close();
         }
+
+        private void needReset()
+        {
+            tempRoom.NeedReset = true;
+            rebuild_checkBox.Checked = true;
+            rebuild_checkBox.Enabled = false;
+        }
+
         private void width_numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            tempRoom.Width = Convert.ToInt32(width_numericUpDown1.Value);
+            int newWidth = Convert.ToInt32(width_numericUpDown1.Value);
+            if (newWidth != tempRoom.Width)
+            {
+                tempRoom.Width = newWidth;
+                needReset();
+            }
         }
         private void height_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            tempRoom.Height = Convert.ToInt32(height_numericUpDown.Value);
+            int newHeight = Convert.ToInt32(height_numericUpDown.Value);
+            if (newHeight != tempRoom.Height)
+            {
+                tempRoom.Height = newHeight;
+                needReset();
+            }
         }
         private void cancel_button_Click(object sender, EventArgs e)
         {
@@ -84,7 +103,7 @@ namespace RoomCreator
         }
         private void reward_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Enum.TryParse<RewardType>(reward_comboBox.SelectedValue.ToString(), out RewardType reward);
+            Enum.TryParse<RoomRewardType>(reward_comboBox.SelectedValue.ToString(), out RoomRewardType reward);
             tempRoom.RoomReward = reward;
         }
         private void createFolder_checkBox_CheckedChanged(object sender, EventArgs e)
@@ -160,6 +179,15 @@ namespace RoomCreator
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator", UseShellExecute = true });
+        }
+
+        private void rebuild_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            tempRoom.NeedReset = rebuild_checkBox.Checked;
+            if(tempRoom.NeedReset)
+                OK_button.BackColor = Color.Red;
+            else
+                OK_button.BackColor = Color.White;
         }
     }
 }

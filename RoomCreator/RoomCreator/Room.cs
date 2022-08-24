@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace RoomCreator
 {
-    public enum CellType    { Simple, Hole, GoodWater, BadWater }
-    public enum MonsterType { None, Random }
-    public enum RewardType  { None, Gold, Item, Life, Random }
-    public enum Direction   { Left, Right, Up, Down }
+    public enum CellType { Simple, Hole, GoodWater, BadWater }
+    public enum MonsterType { None, Random, Type1, Type2, Type3, Type4, Type5 }
+    public enum RoomRewardType { None, Gold, Item, Life, Random }
+    public enum RewardType { None, Random, Type1, Type2, Gold, Item, Life }
+    public enum Direction { Left, Right, Up, Down }
     public class Walls
     {
         Dictionary<Direction, int> walls;
@@ -27,7 +28,7 @@ namespace RoomCreator
         public bool hasWall(Direction dir)
         {
             return walls[dir] != 0;
-        } 
+        }
         public void setWall(Direction dir, int count = 1)
         {
             if (walls.ContainsKey(dir))
@@ -63,15 +64,15 @@ namespace RoomCreator
 
             walls.Clear();
 
-            walls.Add(Direction.Left,   Convert.ToInt32(wallStrings[0]));
-            walls.Add(Direction.Right,  Convert.ToInt32(wallStrings[1]));
-            walls.Add(Direction.Up,     Convert.ToInt32(wallStrings[2]));
-            walls.Add(Direction.Down,   Convert.ToInt32(wallStrings[3]));
+            walls.Add(Direction.Left, Convert.ToInt32(wallStrings[0]));
+            walls.Add(Direction.Right, Convert.ToInt32(wallStrings[1]));
+            walls.Add(Direction.Up, Convert.ToInt32(wallStrings[2]));
+            walls.Add(Direction.Down, Convert.ToInt32(wallStrings[3]));
         }
     }
     public class Cell
     {
-        public CellType     Type;
+        public CellType Type;
         //public Monster  Monster;
         //public Reward   Reward;
 
@@ -94,7 +95,7 @@ namespace RoomCreator
                     return Color.LightBlue;
                 case CellType.Hole:
                     return Color.Black;
-                default: 
+                default:
                     return Color.Black;
             }
         }
@@ -116,7 +117,7 @@ namespace RoomCreator
             }
         }
     }
-    
+
     public class Monster
     {
         public MonsterType Type;
@@ -130,15 +131,46 @@ namespace RoomCreator
             line += Coord.Y;
             line += " ";
 
-            if (Type == MonsterType.Random)
-                line += "Random";
+            if (Type != MonsterType.None)
+                line += Type.ToString();
 
             return line;
         }
+
+        public static string getStringToDisplay(MonsterType type)
+        {
+            string res = "M";
+
+            if (type == MonsterType.None)
+                return "";
+
+            if (type == MonsterType.Random)
+                return "Rnd";
+
+            return res + type.ToString().Last();
+
+            //switch (type)
+            //{
+            //    case RewardType.Item:
+            //        return type.ToString();
+            //    case RewardType.Gold:
+            //        return type.ToString();
+            //    case RewardType.Life:
+            //        return type.ToString();
+            //    case RewardType.Random:
+            //        return type.ToString();
+            //    default:
+            //        return res + type.ToString().Last();
+            //}
+
+            //return "";
+        }
+
         public Monster(string type, Point coord)
         {
-            if (type == "Random")
-                Type = MonsterType.Random;
+            Enum.TryParse<MonsterType>(type, out MonsterType t);
+            Type = t;
+
             Coord = coord;
         }
 
@@ -162,26 +194,49 @@ namespace RoomCreator
             line += Coord.Y;
             line += " ";
 
-            if (Type == RewardType.Random)
-                line += "Random";
+            if (Type != RewardType.None)
+                line += Type.ToString();
 
             return line;
         }
         public Reward(string type, Point coord)
         {
-            if(type == "Random")
-                Type = RewardType.Random;
+            Enum.TryParse<RewardType>(type, out RewardType t);
+            Type = t;
+
             Coord = coord;
         }
         public Reward(RewardType type, Point coord)
-        { 
+        {
             Type = type;
             Coord = coord;
         }
-        public Reward(Reward other)
+
+        public static string getStringToDisplay(RewardType type)
         {
-            this.Type = other.Type;
-            this.Coord = other.Coord;
+            string res = "R";
+
+            if (type == RewardType.None)
+                return "";
+
+            if (type == RewardType.Random)
+                return "Rnd";
+
+            switch(type)
+            {
+                case RewardType.Item:
+                    return type.ToString();
+                case RewardType.Gold:
+                    return type.ToString();
+                case RewardType.Life:
+                    return type.ToString();
+                case RewardType.Random:
+                    return type.ToString();
+                default:
+                    return res + type.ToString().Last();
+            }
+
+            return "";
         }
     }
 
@@ -294,20 +349,22 @@ namespace RoomCreator
 
 
         //Public data
-        public int          Width;
-        public int          Height;
+        public int              Width;
+        public int              Height;
 
-        public string       Name;
-        public int          ID;
-        public string       Description;
+        public string           Name;
+        public int              ID;
+        public string           Description;
 
-        public bool         IsWall;
+        public bool             IsWall;
 
-        public Walls        Wall;
-        public RewardType   RoomReward;
-        public int          Level;
+        public Walls            Wall;
+        public RoomRewardType   RoomReward;
+        public int              Level;
 
-        public SaveData     SaveData;
+        public SaveData         SaveData;
+
+        public bool             NeedReset = false;
 
         //Constructors
         public Room()
@@ -320,7 +377,7 @@ namespace RoomCreator
             Description = "";
 
             Wall      = new Walls();
-            RoomReward  = RewardType.None;
+            RoomReward  = RoomRewardType.None;
             Level = 10;
 
             SaveData    = new SaveData();
@@ -389,7 +446,7 @@ namespace RoomCreator
             IsWall      = Convert.ToInt32(lines[2]) == 0 ? false : true;
             Width       = Convert.ToInt32(lines[3].Split(' ')[0]);
             Height      = Convert.ToInt32(lines[3].Split(' ')[1]);
-            Enum.TryParse<RewardType>(lines[4], out RewardType roomReward);
+            Enum.TryParse<RoomRewardType>(lines[4], out RoomRewardType roomReward);
             RoomReward  = roomReward;
             Level       = Convert.ToInt32(lines[5]);
             Wall.SetWallsFromFile(lines[6]);
@@ -548,6 +605,7 @@ namespace RoomCreator
             cells = new Cell[Height, Width];
             monsters = new Monsters();
             rewards = new Rewards();
+            NeedReset = false;
 
             for (int row = 0; row < Height; ++row)
             {

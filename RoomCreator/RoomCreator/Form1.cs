@@ -18,17 +18,7 @@ namespace RoomCreator
         }
 
 
-        private string getButtonText(Point coord)
-        {
-            string separator = " ";
-
-            Button button = cells[coord.X, coord.Y];
-
-            if (room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
-                separator = "*";
-            
-            return coord.X.ToString() + separator + coord.Y.ToString();
-        }
+        
         private Bitmap getButtonImage(Point coord)
         {
             Button button = cells[coord.X, coord.Y];
@@ -51,11 +41,12 @@ namespace RoomCreator
 
                 if(room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
                 {
-                    using (Font arial = new Font("Arial", 15))
+                    using (Font arial = new Font("Arial", 8, FontStyle.Bold))
                     {
                         Rectangle RC = button.ClientRectangle;
-                        RC.Inflate(-5, -5);
-                        G.DrawString("*", arial, Brushes.Orange, RC, SF);
+                        RC.Inflate(-5, -1);
+                        string toDisplay = Reward.getStringToDisplay(room.rewards.GetRewardOnCoord(coord).Type);
+                        G.DrawString(toDisplay, arial, Brushes.Orange, RC, SF);
                     }
                 }
                 
@@ -70,19 +61,19 @@ namespace RoomCreator
 
                 if (room.monsters.GetMonsterOnCoord(coord) != null && room.monsters.GetMonsterOnCoord(coord).Type != MonsterType.None)
                 {
-                    using (Font arial = new Font("Arial", 12))
+                    using (Font arial = new Font("Arial", 9, FontStyle.Bold))
                     {
                         Rectangle RC = button.ClientRectangle;
                         RC.X = 0;
                         RC.Y = 15;
-                        G.DrawString("m", arial, Brushes.Red, RC, SF);
+                        string toDisplay = Monster.getStringToDisplay(room.monsters.GetMonsterOnCoord(coord).Type);
+                        G.DrawString(toDisplay, arial, Brushes.Red, RC, SF);
                     }
                 }
             }
 
             return bmp;
         }
-        
         private Point getButtonIndex(Button button)
         {
             for (int row = 0; row < room.Height; ++row)
@@ -95,9 +86,10 @@ namespace RoomCreator
             }
             return new Point(-1, -1);
         }
-        private void reset()
+        private void reset(bool resetRoom)
         {
-            room.resetRoom();
+            if(resetRoom)
+                room.resetRoom();
 
             foreach (Button b in cells)
             {
@@ -196,7 +188,6 @@ namespace RoomCreator
             button.Image = getButtonImage(coord);
             button.ImageAlign = ContentAlignment.MiddleCenter;
         }
-
         private void sizeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Form settings = new SettingsForm(ref room);
@@ -204,7 +195,7 @@ namespace RoomCreator
 
             if (result == DialogResult.OK)
             {
-                reset();
+                reset(room.NeedReset);
                 generateMap();
             }
         }
@@ -214,7 +205,7 @@ namespace RoomCreator
             DialogResult result = openFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                reset();
+                reset(true);
                 room.load(openFileDialog.FileName);
                 generateMap();
             }
@@ -233,8 +224,10 @@ namespace RoomCreator
         {
             room.load(openFileDialog.FileName);
         }
-
-
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator#readme", UseShellExecute = true });
+        }
 
         //Unused methods
         private void rightClick(object sender, MouseEventArgs e)
@@ -256,6 +249,17 @@ namespace RoomCreator
         {
             room.save(saveFileDialog.FileName);
         }
+        private string getButtonText(Point coord)
+        {
+            string separator = " ";
+
+            Button button = cells[coord.X, coord.Y];
+
+            if (room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
+                separator = "*";
+
+            return coord.X.ToString() + separator + coord.Y.ToString();
+        }
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 'm')
@@ -270,11 +274,6 @@ namespace RoomCreator
         {
             if (e.KeyCode == Keys.M)
                 monster_radioButton.Checked = true;
-        }
-
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator#readme", UseShellExecute = true });
         }
     }
 }

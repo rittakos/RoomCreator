@@ -59,6 +59,7 @@
             this.rightWall_checkBox = new System.Windows.Forms.CheckBox();
             this.isWall_checkBox = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.rebuild_checkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.width_numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_numericUpDown)).BeginInit();
@@ -355,11 +356,23 @@
             this.linkLabel1.Text = "GitHub";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // rebuild_checkBox
+            // 
+            this.rebuild_checkBox.AutoSize = true;
+            this.rebuild_checkBox.Location = new System.Drawing.Point(539, 406);
+            this.rebuild_checkBox.Name = "rebuild_checkBox";
+            this.rebuild_checkBox.Size = new System.Drawing.Size(85, 25);
+            this.rebuild_checkBox.TabIndex = 33;
+            this.rebuild_checkBox.Text = "Rebuild";
+            this.rebuild_checkBox.UseVisualStyleBackColor = true;
+            this.rebuild_checkBox.CheckedChanged += new System.EventHandler(this.rebuild_checkBox_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.rebuild_checkBox);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.isWall_checkBox);
             this.Controls.Add(this.rightWall_checkBox);
@@ -434,5 +447,6 @@
         private CheckBox rightWall_checkBox;
         private CheckBox isWall_checkBox;
         private LinkLabel linkLabel1;
+        private CheckBox rebuild_checkBox;
     }
 }

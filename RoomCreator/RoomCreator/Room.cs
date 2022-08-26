@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace RoomCreator
 {
     public enum CellType { Simple, Hole, GoodWater, BadWater }
-    public enum MonsterType { None, Random, Type1, Type2, Type3, Type4, Type5 }
+    public enum MonsterType { None, Random, Spider, Mosquito, Worm, Caterpillar, Wasp, Type1, Type2 }
     public enum RoomRewardType { None, Gold, Item, Life, Random }
-    public enum RewardType { None, Random, Type1, Type2, Gold, Item, Life }
+    public enum RewardType { None, Random, Gold, Item, Life, Type1, Type2 }
     public enum Direction { Left, Right, Up, Down }
     public class Walls
     {
@@ -146,6 +146,22 @@ namespace RoomCreator
 
             if (type == MonsterType.Random)
                 return "Rnd";
+
+            switch (type)
+            {
+                case MonsterType.Spider:
+                    return "Spd";
+                case MonsterType.Wasp:
+                    return type.ToString();
+                case MonsterType.Worm:
+                    return type.ToString();
+                case MonsterType.Caterpillar:
+                    return "Ctr";
+                case MonsterType.Mosquito:
+                    return "Msq";
+                default:
+                    return res + type.ToString().Last();
+            }
 
             return res + type.ToString().Last();
 

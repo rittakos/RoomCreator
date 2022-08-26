@@ -358,10 +358,15 @@ namespace RoomCreator
     public class Room : ICloneable
     {
         //Private data
-        private const int       headerDataCount = 9;
+        private const int       version1 = 1;
+        private const int       headerDataCount = 10;
+
+        private int             currentVersion = version1;
+
         private Cell[,]         cells;
         public Monsters         monsters;
         public Rewards          rewards;
+
 
 
         //Public data
@@ -456,18 +461,19 @@ namespace RoomCreator
 
             string[] lines = File.ReadAllLines(path);
 
-            Name        = lines[0].Split(' ')[0];
-            ID          = Convert.ToInt32(lines[0].Split(' ')[1]);
-            Description = lines[1];
-            IsWall      = Convert.ToInt32(lines[2]) == 0 ? false : true;
-            Width       = Convert.ToInt32(lines[3].Split(' ')[0]);
-            Height      = Convert.ToInt32(lines[3].Split(' ')[1]);
-            Enum.TryParse<RoomRewardType>(lines[4], out RoomRewardType roomReward);
-            RoomReward  = roomReward;
-            Level       = Convert.ToInt32(lines[5]);
-            Wall.SetWallsFromFile(lines[6]);
-            monsterPath = lines[7];
-            rewardPath  = lines[8];
+            currentVersion  = Convert.ToInt32(lines[0]);
+            Name            = lines[1].Split(' ')[0];
+            ID              = Convert.ToInt32(lines[1].Split(' ')[1]);
+            Description     = lines[2];
+            IsWall          = Convert.ToInt32(lines[3]) == 0 ? false : true;
+            Width           = Convert.ToInt32(lines[4].Split(' ')[0]);
+            Height          = Convert.ToInt32(lines[4].Split(' ')[1]);
+            Enum.TryParse<RoomRewardType>(lines[5], out RoomRewardType roomReward);
+            RoomReward      = roomReward;
+            Level           = Convert.ToInt32(lines[6]);
+            Wall.SetWallsFromFile(lines[7]);
+            monsterPath     = lines[8];
+            rewardPath      = lines[9];
 
 
             resetRoom();
@@ -498,6 +504,7 @@ namespace RoomCreator
 
             using (StreamWriter writer = new StreamWriter(path))
             {
+                writer.WriteLine(currentVersion);
                 writer.WriteLine("{0} {1}", Name, ID);
                 writer.WriteLine(Description);
                 writer.WriteLine(IsWall ? "1" : "0");

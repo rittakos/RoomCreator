@@ -128,7 +128,7 @@ namespace RoomCreator
                 MessageBox.Show("Please enter only numbers.");
                 ID_textBox.Text = ID_textBox.Text.Remove(ID_textBox.Text.Length - 1);
             }else if(ID_textBox.Text != "")
-                tempRoom.ID = Convert.ToInt32(ID_textBox.Text);
+                tempRoom.ID = ID_textBox.Text;
         }
 
         private void level_numericUpDown_ValueChanged(object sender, EventArgs e)

@@ -374,7 +374,7 @@ namespace RoomCreator
         public int              Height;
 
         public string           Name;
-        public int              ID;
+        public string           ID;
         public string           Description;
 
         public bool             IsWall;
@@ -394,7 +394,7 @@ namespace RoomCreator
             Height      = 10;
 
             Name        = "Room";
-            ID          = 0;
+            ID          = "";
             Description = "";
 
             Wall      = new Walls();
@@ -463,7 +463,7 @@ namespace RoomCreator
 
             currentVersion  = Convert.ToInt32(lines[0]);
             Name            = lines[1].Split(' ')[0];
-            ID              = Convert.ToInt32(lines[1].Split(' ')[1]);
+            ID              = lines[1].Split(' ')[1];
             Description     = lines[2];
             IsWall          = Convert.ToInt32(lines[3]) == 0 ? false : true;
             Width           = Convert.ToInt32(lines[4].Split(' ')[0]);

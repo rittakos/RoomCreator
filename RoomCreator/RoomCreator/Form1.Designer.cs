@@ -36,13 +36,14 @@
             this.sizeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.cellType_radioButton = new System.Windows.Forms.RadioButton();
             this.monster_radioButton = new System.Windows.Forms.RadioButton();
             this.reward_radioButton = new System.Windows.Forms.RadioButton();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settings_contextMenuStrip.SuspendLayout();
             this.settings_menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +74,7 @@
             this.settings_menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.settings_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sizeToolStripMenuItem1,
+            this.generateToolStripMenuItem,
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -102,6 +104,13 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(57, 25);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(56, 25);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // openFileDialog
             // 
@@ -148,12 +157,12 @@
             this.reward_radioButton.Text = "Rewards";
             this.reward_radioButton.UseVisualStyleBackColor = true;
             // 
-            // helpToolStripMenuItem
+            // generateToolStripMenuItem
             // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(56, 25);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            this.generateToolStripMenuItem.Name = "generateToolStripMenuItem";
+            this.generateToolStripMenuItem.Size = new System.Drawing.Size(87, 25);
+            this.generateToolStripMenuItem.Text = "Generate";
+            this.generateToolStripMenuItem.Click += new System.EventHandler(this.generateToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -194,5 +203,6 @@
         private RadioButton monster_radioButton;
         private RadioButton reward_radioButton;
         private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem generateToolStripMenuItem;
     }
 }

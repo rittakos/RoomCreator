@@ -229,6 +229,22 @@ namespace RoomCreator
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = @"https://github.com/rittakos/RoomCreator#readme", UseShellExecute = true });
         }
 
+        private void generateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Generator generator = new Generator();
+            Form generatorForm = new GeneratorForm(ref generator);
+            DialogResult result = generatorForm.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                generator.Generate();
+            }
+        }
+
+
+
+
+
         //Unused methods
         private void rightClick(object sender, MouseEventArgs e)
         {

@@ -8,7 +8,6 @@ namespace RoomCreator
 {
     public class SaveData
     {
-        const string RoomExtension      = "rm";
         const string MonsterExtension   = "ms";
         const string RewardExtension    = "rw";
 
@@ -26,7 +25,7 @@ namespace RoomCreator
             folderPath = Directory.GetParent(path).FullName;
 
             string[] parts = path.Split('\\');
-            RoomFileName = parts[parts.Length - 1];
+            RoomFileName = parts[^1];
         }
 
         public string getRootPath()

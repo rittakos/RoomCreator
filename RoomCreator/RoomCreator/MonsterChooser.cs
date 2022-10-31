@@ -12,8 +12,8 @@ namespace RoomCreator
 {
     public partial class MonsterChooser : Form
     {
-        Monster monster;
-        public MonsterChooser()
+        readonly Monster? monster;
+        public  MonsterChooser()
         {
             InitializeComponent();
         }
@@ -29,19 +29,21 @@ namespace RoomCreator
 
         private void monsterType_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (monster == null)
+                throw new NullReferenceException();
             monster.Type = (MonsterType)monsterType_comboBox.SelectedItem;
         }
 
         private void ok_button_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            this.Close();
+            Close();
         }
 
         private void cancel_button_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            this.Close();
+            Close();
         }
 
         private void monsterType_comboBox_KeyDown(object sender, KeyEventArgs e)
@@ -52,7 +54,7 @@ namespace RoomCreator
                 DialogResult = DialogResult.OK;
             else
                 return;
-            this.Close();
+            Close();
         }
     }
 }

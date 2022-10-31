@@ -6,7 +6,7 @@ namespace RoomCreator
     {
         private Room room;
         private Button[,] cells;
-        private Font buttonTextFont = new Font("Arial", 10, FontStyle.Bold);
+        //private Font buttonTextFont = new Font("Arial", 10, FontStyle.Bold);
         public Form1()
         {
             InitializeComponent();
@@ -24,36 +24,36 @@ namespace RoomCreator
             Button button = cells[coord.X, coord.Y];
             Cell currentCell = room.getCell(coord);
 
-            Bitmap bmp = new Bitmap(button.ClientRectangle.Width, button.ClientRectangle.Height);
+            Bitmap bmp = new (button.ClientRectangle.Width, button.ClientRectangle.Height);
 
             using (Graphics G = Graphics.FromImage(bmp))
             {
                 G.Clear(button.BackColor);
                 using (Graphics gfx = Graphics.FromImage(bmp))
-                using (SolidBrush brush = new SolidBrush(currentCell.getColor()))
+                using (SolidBrush brush = new (currentCell.getColor()))
                 {
                     gfx.FillRectangle(brush, 0, 0, button.ClientRectangle.Width, button.ClientRectangle.Height);
                 }
 
-                StringFormat SF = new StringFormat();
-                SF.Alignment = StringAlignment.Center;
-                SF.LineAlignment = StringAlignment.Near;
-
-                if(room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
+                StringFormat SF = new()
                 {
-                    using (Font arial = new Font("Arial", 8, FontStyle.Bold))
-                    {
-                        Rectangle RC = button.ClientRectangle;
-                        RC.Inflate(-5, -1);
-                        string toDisplay = Reward.getStringToDisplay(room.rewards.GetRewardOnCoord(coord).Type);
-                        G.DrawString(toDisplay, arial, Brushes.Orange, RC, SF);
-                    }
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Near
+                };
+
+                if (room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
+                {
+                    using Font arial = new("Arial", 8, FontStyle.Bold);
+                    Rectangle RC = button.ClientRectangle;
+                    RC.Inflate(-5, -1);
+                    string toDisplay = Reward.getStringToDisplay(room.rewards.GetRewardOnCoord(coord).Type);
+                    G.DrawString(toDisplay, arial, Brushes.Orange, RC, SF);
                 }
                 
                 Brush textBrush = new SolidBrush(currentCell.getTextColor());
 
                 string text = coord.X + " " + coord.Y;
-                using (Font courier = new Font("MS Courier", 12))
+                using (Font courier = new("MS Courier", 12))
                 {
                     SF.LineAlignment = StringAlignment.Center;
                     G.DrawString(text, courier, textBrush, button.ClientRectangle, SF);
@@ -61,14 +61,12 @@ namespace RoomCreator
 
                 if (room.monsters.GetMonsterOnCoord(coord) != null && room.monsters.GetMonsterOnCoord(coord).Type != MonsterType.None)
                 {
-                    using (Font arial = new Font("Arial", 9, FontStyle.Bold))
-                    {
-                        Rectangle RC = button.ClientRectangle;
-                        RC.X = 0;
-                        RC.Y = 15;
-                        string toDisplay = Monster.getStringToDisplay(room.monsters.GetMonsterOnCoord(coord).Type);
-                        G.DrawString(toDisplay, arial, Brushes.Red, RC, SF);
-                    }
+                    using Font arial = new("Arial", 9, FontStyle.Bold);
+                    Rectangle RC = button.ClientRectangle;
+                    RC.X = 0;
+                    RC.Y = 15;
+                    string toDisplay = Monster.getStringToDisplay(room.monsters.GetMonsterOnCoord(coord).Type);
+                    G.DrawString(toDisplay, arial, Brushes.Red, RC, SF);
                 }
             }
 
@@ -100,17 +98,17 @@ namespace RoomCreator
         }
         private void generateMap()
         {
-            Point start = new Point(3, 70);
-            Size buttonSize = new Size(50, 50);
+            Point start = new (3, 70);
+            Size buttonSize = new (50, 50);
 
             for (int row = 0; row < room.Height; ++row)
             {
                 for(int col = 0; col < room.Width; ++col)
                 {
-                    Point coord = new Point (row, col);
+                    Point coord = new (row, col);
                     Cell currnetCell = room.getCell(coord);
 
-                    Button newButton = new Button();
+                    Button newButton = new ();
                     this.Controls.Add(newButton);
 
                     //newButton.Text =  getButtonText(coord);
@@ -143,9 +141,11 @@ namespace RoomCreator
 
 
         //Event handlers
-        private void leftClick(object sender, EventArgs e)
+        private void leftClick(object? sender, EventArgs e)
         {
-            Button button = ((Button)sender);
+            if (sender == null)
+                throw new NullReferenceException();
+            Button button = (Button)sender;
             Point coord = getButtonIndex(button);
 
             if (cellType_radioButton.Checked)
@@ -156,8 +156,10 @@ namespace RoomCreator
                 if(room.monsters.GetMonsterOnCoord(coord) != null)
                     type = room.monsters.GetMonsterOnCoord(coord).Type;
 
-                Monster m = new Monster(type, coord);
-                m.Type = type;
+                Monster m = new(type, coord)
+                {
+                    Type = type
+                };
 
                 Form settings = new MonsterChooser(ref m);
                 DialogResult result = settings.ShowDialog();
@@ -172,8 +174,10 @@ namespace RoomCreator
                 if (room.rewards.GetRewardOnCoord(coord) != null)
                     type = room.rewards.GetRewardOnCoord(coord).Type;
 
-                Reward r = new Reward(type, coord);
-                r.Type = type;
+                Reward r = new(type, coord)
+                {
+                    Type = type
+                };
 
                 Form settings = new RewardChooserForm(ref r);
                 DialogResult result = settings.ShowDialog();
@@ -231,7 +235,7 @@ namespace RoomCreator
 
         private void generateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Generator generator = new Generator();
+            Generator generator = new ();
             Form generatorForm = new GeneratorForm(ref generator);
             DialogResult result = generatorForm.ShowDialog();
 
@@ -246,7 +250,7 @@ namespace RoomCreator
 
 
         //Unused methods
-        private void rightClick(object sender, MouseEventArgs e)
+        private void rightClick(object? sender, MouseEventArgs e)
         {
             //if(e.Button == MouseButtons.Right)
             //{
@@ -257,7 +261,7 @@ namespace RoomCreator
             //    ctrl.ForeColor = getButtonTextColor(coord);
             //}
         }
-        private void doubleClick(object sender, MouseEventArgs e)
+        private void doubleClick(object? sender, MouseEventArgs e)
         {
 
         }
@@ -269,7 +273,7 @@ namespace RoomCreator
         {
             string separator = " ";
 
-            Button button = cells[coord.X, coord.Y];
+            //Button button = cells[coord.X, coord.Y];
 
             if (room.rewards.GetRewardOnCoord(coord) != null && room.rewards.GetRewardOnCoord(coord).Type != RewardType.None)
                 separator = "*";

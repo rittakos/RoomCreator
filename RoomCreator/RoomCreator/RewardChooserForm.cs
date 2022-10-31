@@ -12,7 +12,7 @@ namespace RoomCreator
 {
     public partial class RewardChooserForm : Form
     {
-        Reward reward;
+        readonly Reward? reward;
 
         public RewardChooserForm()
         {
@@ -29,13 +29,15 @@ namespace RoomCreator
 
         private void rewardType_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.reward.Type = (RewardType)rewardType_comboBox.SelectedItem;
+            if (reward == null)
+                throw new NullReferenceException();
+            reward.Type = (RewardType)rewardType_comboBox.SelectedItem;
         }
 
         private void ok_button_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            this.Close();
+            Close();
         }
 
         private void cancel_button_Click(object sender, EventArgs e)
@@ -52,7 +54,7 @@ namespace RoomCreator
                 DialogResult = DialogResult.OK;
             else
                 return;
-            this.Close();
+            Close();
         }
 
 
